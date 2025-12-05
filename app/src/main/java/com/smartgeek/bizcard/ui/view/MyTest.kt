@@ -1,9 +1,91 @@
 package com.smartgeek.bizcard.ui.view
 
+/** Enums */
 fun main() {
+//    val inPut = Result.ERROR
+//    getResult(result = inPut)
+
+    Repository.startFetch()
+    getResult(result = Repository.getCurrentSate())
+
+    Repository.finishedFetch()
+    getResult(result = Repository.getCurrentSate())
+
+    Repository.error()
+    getResult(result = Repository.getCurrentSate())
+}
+
+fun getResult(result: Result) {
+    return when(result) {
+        Result.SUCCESS -> println("Success!")
+        Result.FAILURE -> println("Failure!")
+        Result.ERROR -> println("Error!")
+        Result.IDLE -> println("Idle!")
+        Result.LOADING -> println("Loading!")
+    }
+}
+
+object Repository{
+    private var loadState: Result = Result.IDLE
+    private var dataFetched: String? = null
+
+    fun startFetch() {
+        loadState = Result.LOADING
+        dataFetched = "data"
+    }
+
+    fun finishedFetch() {
+        loadState = Result.SUCCESS
+        dataFetched = null
+    }
+
+    fun error() {
+        loadState = Result.ERROR
+    }
+
+    fun getCurrentSate(): Result {
+        return loadState
+    }
+}
+
+enum class Result {
+    SUCCESS,
+    FAILURE,
+    ERROR,
+    IDLE,
+    LOADING
 }
 
 
+
+/** Generics */
+//fun main() {
+//
+//    val listOfItems = listOf("Abhi", "Ram", "Raj")
+//    val listOfNumber = listOf(1,2,3)
+//    val finder = Finder(list = listOfNumber)
+//
+//    finder.findItem(element = 3){
+//        println("Found Item $it")
+//    }
+//}
+//
+/** NOTE THIS
+ * | What you want                                       | Allowed? | Notes                                  |
+ * | --------------------------------------------------- | -------- | -------------------------------------- |
+ * | Use T, A, X, MyType, etc.(in class MyClass<T>() {}) | ✔ Yes    | Any custom name is fine                |
+ * | Use `Any` as the **name** of the type parameter     | ❌ No    | Conflicts with Kotlin’s built-in `Any` |
+ * | Use Kotlin’s `Any` as a type instead of a generic   | ✔ Yes    | But you lose generics/type safety      |
+ */
+//
+//class Finder<T>(private val list: List<T>) {
+//    fun findItem(element: T, foundItem: (element: T?) -> Unit) {
+//        val itemFoundInList = list.filter {
+//            it == element
+//        }
+//        if (itemFoundInList.isNullOrEmpty()) foundItem(null) else foundItem(itemFoundInList.first())
+//    }
+//}
 
 /** Data Class */
 //fun main () {
